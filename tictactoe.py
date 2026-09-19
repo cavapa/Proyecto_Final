@@ -46,13 +46,37 @@ def floor(value):
 state = {'player': 0}
 players = [drawx, drawo]
 board = {}  # Diccionario para registrar las casillas ocupadas
-
+def check_winner():
+    """Verifica si hay un ganador o empate."""
+    wins = [
+        # Filas
+        [(-200, 67), (-67, 67), (67, 67)],
+        [(-200, -67), (-67, -67), (67, -67)],
+        [(-200, -200), (-67, -200), (67, -200)],
+        # Columnas
+        [(-200, 67), (-200, -67), (-200, -200)],
+        [(-67, 67), (-67, -67), (-67, -200)],
+        [(67, 67), (67, -67), (67, -200)],
+        # Diagonales
+        [(-200, 67), (-67, -67), (67, -200)],
+        [(-200, -200), (-67, -67), (67, 67)]
+    ]
+    
+    for line in wins:
+        p1, p2, p3 = line
+        if p1 in board and p2 in board and p3 in board:
+            if board[p1] == board[p2] == board[p3]:
+                return board[p1]  # Retorna 0 (X) o 1 (O)
+                
+    if len(board) == 9:
+        return "Empate"
+        
+    return None
 def tap(x, y):
     """Draw X or O in tapped square."""
     x = floor(x)
     y = floor(y)
     
-    # Validación: si la coordenada ya existe en el tablero, ignorar el clic
     if (x, y) in board:
         print("¡Casilla ocupada! Elige otra.")
         return
@@ -62,10 +86,21 @@ def tap(x, y):
     draw(x, y)
     update()
     
-    # Guardar la coordenada como ocupada por el jugador actual
     board[(x, y)] = player
-    
     state['player'] = not player
+    
+    # Revisar si el juego ha terminado
+    winner = check_winner()
+    if winner is not None:
+        up()
+        goto(0, 0)
+        color('green')
+        if winner == "Empate":
+            write("¡Empate!", align="center", font=("Arial", 40, "bold"))
+        else:
+            jugador = "X" if winner == 0 else "O"
+            write(f"¡Ganó {jugador}!", align="center", font=("Arial", 40, "bold"))
+        onscreenclick(None)  # Congela la pantalla
 
 setup(420, 420, 370, 0)
 hideturtle()
