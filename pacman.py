@@ -103,9 +103,15 @@ def world():
             square(x, y)
 
             if tile == 1:
+                # Modificación 2: Cambio de forma y color del alimento (cuadrados verdes)
                 path.up()
-                path.goto(x + 10, y + 10)
-                path.dot(2, 'white')
+                path.goto(x + 7, y + 7)
+                path.color('green')
+                path.begin_fill()
+                for _ in range(4):
+                    path.forward(6)
+                    path.left(90)
+                path.end_fill()
 
 
 def move():
