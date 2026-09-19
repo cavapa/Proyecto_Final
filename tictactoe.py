@@ -22,17 +22,20 @@ def grid():
 
 
 def drawx(x, y):
-    """Draw X player."""
-    line(x, y, x + 133, y + 133)
-    line(x, y + 133, x + 133, y)
-
+    """Dibuja el jugador X."""
+    color('blue')
+    width(4)
+    line(x + 20, y + 20, x + 113, y + 113)
+    line(x + 20, y + 113, x + 113, y + 20)
 
 def drawo(x, y):
-    """Draw O player."""
+    """Dibuja el jugador O."""
+    color('red')
+    width(4)
     up()
-    goto(x + 67, y + 5)
+    goto(x + 67, y + 20)
     down()
-    circle(62)
+    circle(46)
 
 
 def floor(value):
@@ -42,18 +45,27 @@ def floor(value):
 
 state = {'player': 0}
 players = [drawx, drawo]
-
+board = {}  # Diccionario para registrar las casillas ocupadas
 
 def tap(x, y):
     """Draw X or O in tapped square."""
     x = floor(x)
     y = floor(y)
+    
+    # Validación: si la coordenada ya existe en el tablero, ignorar el clic
+    if (x, y) in board:
+        print("¡Casilla ocupada! Elige otra.")
+        return
+        
     player = state['player']
     draw = players[player]
     draw(x, y)
     update()
+    
+    # Guardar la coordenada como ocupada por el jugador actual
+    board[(x, y)] = player
+    
     state['player'] = not player
-
 
 setup(420, 420, 370, 0)
 hideturtle()
