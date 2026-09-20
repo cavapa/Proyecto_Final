@@ -83,6 +83,12 @@ def draw():
     color('black')
     write(f"Pares descubiertos: {state['pares']}", font=('Arial', 14, 'normal'))
 
+if not any(hide):
+    up()
+    goto(-100, 0)
+    color ('green')
+    write("¡Juego Terminado!", font=('Arial', 20, 'bold'))
+
     update()
     ontimer(draw, 100)
 
