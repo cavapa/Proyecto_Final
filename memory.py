@@ -16,7 +16,7 @@ from freegames import path
 
 car = path('car.gif')
 tiles = list(range(32)) * 2
-state = {'mark': None}
+state = {'mark': None, 'pares': 0}
 hide = [True] * 64
 
 
@@ -54,6 +54,7 @@ def tap(x, y):
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
+        state['pares'] += 1
 
 
 def draw():
@@ -76,6 +77,11 @@ def draw():
         goto(x + 2, y)
         color('black')
         write(tiles[mark], font=('Arial', 30, 'normal'))
+
+    up()
+    goto(-190, 200)
+    color('black')
+    write(f"Pares descubiertos: {state['pares']}", font=('Arial', 14, 'normal'))
 
     update()
     ontimer(draw, 100)
